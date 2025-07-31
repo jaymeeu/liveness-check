@@ -52,28 +52,57 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
 
      try {
+            Log.i("LivenessApp", "🚀 Starting Amplify initialization")
+            Log.i("LivenessApp", "📱 Device: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}")
+            Log.i("LivenessApp", "🔧 Android API: ${android.os.Build.VERSION.SDK_INT}")
+            
             Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.configure(applicationContext)
-            Log.i("LivenessApp", "Initialized Amplify successfully")
+            Log.i("LivenessApp", "✅ Amplify initialized successfully")
             
-            // Get guest credentials for unauthenticated access
-            Amplify.Auth.fetchAuthSession(
-                { session ->
-                    Log.i("LivenessApp", "✅ Auth session fetched successfully")
-                    Log.i("LivenessApp", "Is signed in: ${session.isSignedIn}")
-                    Log.i("LivenessApp", "Session type: ${session.javaClass.simpleName}")
-                    
-                    // Check if we have AWS credentials (indicates Identity Pool is working)
-                    Log.i("LivenessApp", "✅ Auth session obtained - Identity Pool should be working")
-                    Log.i("LivenessApp", "Ready for Face Liveness authentication")
-                },
-                { error -> 
-                    Log.e("LivenessApp", "❌ Failed to fetch auth session: ${error.message}", error)
-                    Log.e("LivenessApp", "This will prevent Face Liveness from working properly")
-                }
-            )
+            // Add a small delay to ensure proper initialization
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                // Get guest credentials for unauthenticated access
+                Amplify.Auth.fetchAuthSession(
+                    { session ->
+                        Log.i("LivenessApp", "✅ Auth session fetched successfully")
+                        Log.i("LivenessApp", "🔐 Is signed in: ${session.isSignedIn}")
+                        Log.i("LivenessApp", "📋 Session type: ${session.javaClass.simpleName}")
+                        
+                        // Check AWS credentials availability
+                        if (session is com.amplifyframework.auth.cognito.AWSCognitoAuthSession) {
+                            val credentialsResult = session.awsCredentialsResult
+                            Log.i("LivenessApp", "🔑 AWS Credentials status: ${credentialsResult.type}")
+                            
+                            when (credentialsResult.type) {
+                                com.amplifyframework.auth.result.AuthSessionResult.Type.SUCCESS -> {
+                                    Log.i("LivenessApp", "✅ AWS credentials are ready")
+                                    Log.i("LivenessApp", "🎯 Face Liveness is ready to use")
+                                }
+                                com.amplifyframework.auth.result.AuthSessionResult.Type.FAILURE -> {
+                                    Log.e("LivenessApp", "❌ AWS credentials failed: ${credentialsResult.error?.message}")
+                                }
+                                else -> {
+                                    Log.w("LivenessApp", "⚠️ AWS credentials status unknown")
+                                }
+                            }
+                        }
+                    },
+                    { error -> 
+                        Log.e("LivenessApp", "❌ Failed to fetch auth session: ${error.message}", error)
+                        Log.e("LivenessApp", "❌ Error type: ${error.javaClass.simpleName}")
+                        Log.e("LivenessApp", "❌ This may prevent Face Liveness from working on this device")
+                        
+                        // Log additional debugging info
+                        Log.e("LivenessApp", "🔍 Network state: ${getNetworkInfo()}")
+                    }
+                )
+            }, 1000) // 1 second delay
+            
         } catch (error: Exception) {
-            Log.e("LivenessApp", "Could not initialize Amplify: ${error.message}", error)
+            Log.e("LivenessApp", "💥 Could not initialize Amplify: ${error.message}", error)
+            Log.e("LivenessApp", "💥 Error type: ${error.javaClass.simpleName}")
+            Log.e("LivenessApp", "💥 This will prevent Face Liveness from working")
         }
 
     SoLoader.init(this, OpenSourceMergedSoMapping)
@@ -87,5 +116,19 @@ class MainApplication : Application(), ReactApplication {
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig)
+  }
+  
+  private fun getNetworkInfo(): String {
+    return try {
+      val connectivityManager = getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+      val activeNetwork = connectivityManager.activeNetworkInfo
+      if (activeNetwork?.isConnected == true) {
+        "Connected (${activeNetwork.typeName})"
+      } else {
+        "Not connected"
+      }
+    } catch (e: Exception) {
+      "Unknown (${e.message})"
+    }
   }
 }
