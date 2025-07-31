@@ -1,4 +1,4 @@
-package com.jaymeeu.livenesscheck.liveness
+package com.datamellon.livenesscheck.liveness
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import com.jaymeeu.livenesscheck.BuildConfig
+import com.datamellon.livenesscheck.BuildConfig
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat

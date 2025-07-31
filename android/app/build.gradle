@@ -105,9 +105,9 @@ compileOptions {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.jaymeeu.livenesscheck'
+    namespace 'com.datamellon.livenesscheck'
     defaultConfig {
-        applicationId 'com.jaymeeu.livenesscheck'
+        applicationId 'com.datamellon.livenesscheck'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2

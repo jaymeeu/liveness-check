@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>livenesscheck</string>
-          <string>com.jaymeeu.livenesscheck</string>
+          <string>com.datamellon.livenesscheck</string>
         </array>
       </dict>
     </array>

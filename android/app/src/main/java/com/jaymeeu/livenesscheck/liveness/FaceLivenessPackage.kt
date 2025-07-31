@@ -1,4 +1,4 @@
-package com.jaymeeu.livenesscheck.liveness
+package com.datamellon.livenesscheck.liveness
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

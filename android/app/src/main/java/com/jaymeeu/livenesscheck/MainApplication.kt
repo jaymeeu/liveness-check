@@ -1,4 +1,4 @@
-package com.jaymeeu.livenesscheck
+package com.datamellon.livenesscheck
 
 import android.app.Application
 import android.content.res.Configuration
@@ -18,7 +18,7 @@ import expo.modules.ReactNativeHostWrapper
 
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
-import com.jaymeeu.livenesscheck.liveness.FaceLivenessPackage
+import com.datamellon.livenesscheck.liveness.FaceLivenessPackage
 import android.util.Log;
 
 class MainApplication : Application(), ReactApplication {
