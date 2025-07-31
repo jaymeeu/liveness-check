@@ -1,13 +1,12 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert } from 'react-native';
-import { ArrowLeft, Search, Send, Shield, FileText, Camera } from 'lucide-react-native';
-import { useState } from 'react';
-import { useApp, Contact } from '@/contexts/AppContext';
-import { AppProvider } from '@/contexts/AppContext';
 import DocumentUpload from '@/components/DocumentUpload';
 import LivenessCheck from '@/components/LivenessCheck';
-import { formatCurrency } from '@/utils';
+import { AppProvider, Contact, useApp } from '@/contexts/AppContext';
 import { useNotification } from '@/contexts/NotificationContext';
+import { formatCurrency } from '@/utils';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ArrowLeft, Search, Send } from 'lucide-react-native';
+import { useState } from 'react';
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 function TransferContent() {
   const { state, dispatch } = useApp();
@@ -111,6 +110,13 @@ function TransferContent() {
     }
   };
 
+   // When liveness check is completed
+   const handleLivenessFailed = () => {
+    showNotification(`Verification Failed`, "error");
+    setStep('select');
+    
+  };
+
   // If user cancels security check, return to confirm
   const handleSecurityCancel = () => {
     setStep('confirm');
@@ -120,26 +126,26 @@ function TransferContent() {
  
 
   const getSecurityRequirement = (amount: number) => {
-    if (amount >= 200) return 'liveness';
-    if (amount >= 50) return 'document';
+    if (amount >= 100000) return 'liveness';
+    if (amount >= 50000) return 'document';
     return 'none';
   };
 
-  const getSecurityIcon = (requirement: string) => {
-    switch (requirement) {
-      case 'liveness': return <Camera size={16} color="#F59E0B" />;
-      case 'document': return <FileText size={16} color="#F59E0B" />;
-      default: return <Shield size={16} color="#16A34A" />;
-    }
-  };
+  // const getSecurityIcon = (requirement: string) => {
+  //   switch (requirement) {
+  //     case 'liveness': return <Camera size={16} color="#F59E0B" />;
+  //     case 'document': return <FileText size={16} color="#F59E0B" />;
+  //     default: return <Shield size={16} color="#16A34A" />;
+  //   }
+  // };
 
-  const getSecurityText = (requirement: string) => {
-    switch (requirement) {
-      case 'liveness': return 'Liveness check required';
-      case 'document': return 'Document verification required';
-      default: return 'No additional verification needed';
-    }
-  };
+  // const getSecurityText = (requirement: string) => {
+  //   switch (requirement) {
+  //     case 'liveness': return 'Liveness check required';
+  //     case 'document': return 'Document verification required';
+  //     default: return 'No additional verification needed';
+  //   }
+  // };
 
   if (step === 'document') {
     return (
@@ -156,6 +162,7 @@ function TransferContent() {
     return (
       <LivenessCheck
         onComplete={handleLivenessComplete}
+        onFailed={handleLivenessFailed}
         onCancel={handleSecurityCancel}
       />
     );
@@ -274,7 +281,7 @@ function TransferContent() {
           </View>
 
           {/* Security Requirement Indicator */}
-          {amount && parseFloat(amount) > 0 && (
+          {/* {amount && parseFloat(amount) > 0 && (
             <View style={styles.securityIndicator}>
               <View style={styles.securityInfo}>
                 {getSecurityIcon(getSecurityRequirement(parseFloat(amount)))}
@@ -291,7 +298,7 @@ function TransferContent() {
                 </Text>
               )}
             </View>
-          )}
+          )} */}
 
           <TouchableOpacity
             style={[styles.nextButton, (!amount || parseFloat(amount) <= 0) && styles.nextButtonDisabled]}
@@ -637,11 +644,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     // padding: 24,
     marginBottom: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 8,
+    // elevation: 3,
   },
   confirmHeader: {
     alignItems: 'center',

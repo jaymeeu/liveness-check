@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/utils';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Building,
@@ -33,29 +34,29 @@ const activityData = [
     // icon: { type: 'image', source: { uri: 'https://placehold.co/40x40/a9a9a9/ffffff?text=W' } }, // Placeholder for 'Work'
     title: 'Work',
     subtitle: 'Tomorrow',
-    amount: '+1,234.56',
+    amount: '100234.56',
     isCredit: true,
   },
   {
     type: 'transaction',
     icon: { type: 'initials', initials: 'UB', color: '#000' },
     title: 'Uber',
-    subtitle: '26.00',
-    amount: '26.00',
+    subtitle: '2600.00',
+    amount: '2600.00',
   },
   {
     type: 'transaction',
     icon: { type: 'initials', initials: 'TL', color: '#4a4711' },
     title: 'Transport for London',
     subtitle: 'Travel charge for Wed, 1 Jan',
-    amount: '5.80',
+    amount: '50000.80',
   },
   {
     type: 'transaction',
     icon: { type: 'initials', initials: 'GR', color: '#8bc34a' },
     title: 'G Robertson',
     subtitle: '"Thanks for dinner xx"',
-    amount: '+12.00',
+    amount: '12000.00',
     isCredit: true,
   },
   {
@@ -63,7 +64,7 @@ const activityData = [
     icon: { type: 'initials', initials: 'NT', color: '#2a4487' },
     title: 'NOW TV',
     subtitle: '35% cashback',
-    amount: '+8.40',
+    amount: '8010.40',
     isCredit: true,
   },
 ];
@@ -91,7 +92,7 @@ const WalletCard = () => (
         <Text style={styles.walletCardAccount}>04-00-04 • 12345678</Text>
       </View>
       <View style={styles.walletCardBalanceContainer}>
-        <Text style={styles.walletCardBalance}>£1,234.56</Text>
+        <Text style={styles.walletCardBalance}> {formatCurrency(902034)} </Text>
         <Text style={styles.walletCardBalanceLabel}>Balance</Text>
       </View>
     </View>
@@ -142,7 +143,7 @@ const ActivityList = () => (
             <Text style={styles.activityListItemSubtitle}>{item.subtitle}</Text>
           </View>
           <Text style={[styles.activityListAmount, item.isCredit ? styles.activityListCredit : styles.activityListDebit]}>
-            {item.isCredit ? '+' : '-'}£{item.amount.replace(/^[+-]/, '')}
+            {item.isCredit ? '+' : '-'}{ formatCurrency(Number(item.amount))}
           </Text>
         </View>
       );
@@ -228,7 +229,7 @@ export default function HomeScreen() {
             >
               <View style={styles.statItem}>
                 <Building size={16} stroke="#64748b" />
-                <Text style={styles.statAmount}>£3,511.20</Text>
+                <Text style={styles.statAmount}>{formatCurrency(3511)}</Text>
                 <Text style={styles.statLabel}>Personal balance</Text>
                 <View style={styles.statIcons}>
                   <View style={[styles.iconBadge, { backgroundColor: '#8b5cf6' }]} />
@@ -238,7 +239,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.statItem}>
                 <TrendingUp size={16} stroke="#64748b" />
-                <Text style={styles.statAmount}>£3,919.57</Text>
+                <Text style={styles.statAmount}>{formatCurrency(3957)}</Text>
                 <Text style={styles.statLabel}>Spent this month</Text>
                 <View style={styles.statIcons}>
                   <View style={[styles.iconBadge, { backgroundColor: '#ffffff' }]} />
@@ -248,13 +249,13 @@ export default function HomeScreen() {
               </View>
               <View style={styles.statItem}>
                 <Clock size={16} stroke="#64748b" />
-                <Text style={styles.statAmount}>£24.34</Text>
+                <Text style={styles.statAmount}>{formatCurrency(957)}</Text>
                 <Text style={styles.statLabel}>Left to spend</Text>
                 <Text style={styles.statDate}>Until 31st July</Text>
               </View>
               <View style={styles.statItem}>
                 <TrendingUp size={16} stroke="#64748b" />
-                <Text style={styles.statAmount}>£1,245.80</Text>
+                <Text style={styles.statAmount}>{formatCurrency(1957)}</Text>
                 <Text style={styles.statLabel}>Saved this month</Text>
                 <View style={styles.statIcons}>
                   <View style={[styles.iconBadge, { backgroundColor: '#10b981' }]} />
@@ -264,7 +265,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.statItem}>
                 <Building size={16} stroke="#64748b" />
-                <Text style={styles.statAmount}>£892.15</Text>
+                <Text style={styles.statAmount}>{formatCurrency(1297)}</Text>
                 <Text style={styles.statLabel}>Investments</Text>
                 <Text style={styles.statDate}>+12.5% this year</Text>
               </View>

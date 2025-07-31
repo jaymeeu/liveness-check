@@ -1,10 +1,11 @@
 import { Check, CircleCheck as CheckCircle, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface LivenessCheckProps {
   onComplete: () => void;
   onCancel: () => void;
+  onFailed: () => void;
 }
 
 
@@ -16,7 +17,6 @@ const { FaceLiveness } = NativeModules;
 let livenessEvents: NativeEventEmitter | undefined = undefined;
 if (Platform.OS === 'ios' || Platform.OS === 'android') {
   if (FaceLiveness) {
-    console.log('🔧 Creating NativeEventEmitter for FaceLiveness module');
     livenessEvents = new NativeEventEmitter(FaceLiveness);
     console.log('✅ NativeEventEmitter created successfully');
   } else {
@@ -33,9 +33,17 @@ const startSession = async (sessionId: string) => {
 }
 
 
-export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckProps) {
 
 
+export default function LivenessCheck({ onComplete, onCancel, onFailed }: LivenessCheckProps) {
+
+  const [loading, setLoading] = useState(false)
+  const startLoader = ()=>{
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 10000);
+  }
 
   const [videoSession, setVideoSession] = useState({
     "SessionId": "",
@@ -74,10 +82,7 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
   }, [videoSession]); // Include  in dependency array
 
   const verifySession = async (id: string, token: string) => {
-
-    console.log("sessionID :", id)
-    console.log("clint token :", token)
-
+    setIsProcessing(true)
     const response = await fetch(`https://dev-fraud-api.datamellonai.com/v1/auth/liveness-result/${id}?email=dummyEmail@gmail.com&client_token=${token}`, {
       method: 'GET',
       headers: {
@@ -92,21 +97,24 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
     }
 
     const data = await response.json();
-    console.log('📋 Verication Full API Response:', JSON.stringify(data, null, 2));
-    onComplete()
+    
+    if(data.status === "success" && data.data.is_live){
+      onComplete()
+    }
+    else{
+      onFailed()
+    }
+    
   }
 
   const fetchSessionData = async () => {
+    if(loading){return}
     try {
-      console.log('🚀 Starting liveness session request...');
-      console.log('📱 Platform:', Platform.OS);
-      console.log('🔧 Platform Version:', Platform.Version);
 
       // Check if FaceLiveness module is available
       if (!FaceLiveness) {
         throw new Error('FaceLiveness module not available');
       }
-      console.log('✅ FaceLiveness module is available');
 
       // Fetch session from your API
       const response = await fetch('https://dev-fraud-api.datamellonai.com/v1/auth/start-liveness-session', {
@@ -119,8 +127,6 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
         })
       });
 
-      console.log('📡 API Response status:', response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error('❌ API Error response:', errorText);
@@ -128,8 +134,6 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
       }
 
       const data = await response.json();
-      console.log('📋 Full API Response:', JSON.stringify(data, null, 2));
-
 
       setVideoSession(data.data)
 
@@ -145,7 +149,6 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
       }
 
       setTimeout(() => {
-        console.log('🚀 Starting liveness session now...');
         startSession(sessionId);
       }, 2000); // Increased delay for physical devices
     } catch (error) {
@@ -177,7 +180,9 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
   }
 
   return (
-    <View style={styles.container}>
+    <View
+    style={styles.container}
+  >
       <View style={styles.header}>
         <Text style={styles.title}>Liveness Verification</Text>
         <TouchableOpacity onPress={onCancel} style={styles.closeButton}>
@@ -199,9 +204,12 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.okButton} onPress={() => fetchSessionData()}>
+        <TouchableOpacity style={styles.okButton} onPress={() => {startLoader();fetchSessionData()}}>
           <Check size={20} color="#94a3b8" />
+          {
+            loading ? <ActivityIndicator/> : 
           <Text style={styles.okButtonText}>Verify Face</Text>
+          }
         </TouchableOpacity>
       </View>
     </View>
@@ -211,7 +219,6 @@ export default function LivenessCheck({ onComplete, onCancel }: LivenessCheckPro
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
   },
   header: {
     flexDirection: 'row',
