@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mellybankgen1v6-dev-ef451-authRole",
+      "UnauthRoleArn": "arn:aws:iam::559050233419:role/amplify-mellybankgen1v6-dev-ef451-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::559050233419:role/amplify-mellybankgen1v6-dev-ef451-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-mellybankgen1v6-dev-ef451-deployment",
+      "UnauthRoleName": "amplify-mellybankgen1v6-dev-ef451-unauthRole",
+      "StackName": "amplify-mellybankgen1v6-dev-ef451",
+      "StackId": "arn:aws:cloudformation:eu-west-1:559050233419:stack/amplify-mellybankgen1v6-dev-ef451/9bfcecf0-6bcc-11f0-8009-0ab9e45f02d3",
+      "AmplifyAppId": "d1oxodf4klve0c"
+    },
+    "categories": {
+      "auth": {
+        "mellybankgen1v6790683de": {}
+      }
+    }
+  }
+}
