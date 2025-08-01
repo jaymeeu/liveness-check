@@ -7,6 +7,38 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import PushNotification from "react-native-push-notification";
 
 
+// Test function to trigger a local notification
+export const testNotification = () => {
+  PushNotification.localNotification({
+    title: "Test Notification",
+    message: "This is a test notification with sound!",
+    playSound: true,
+    soundName: 'default',
+    channelId: "default-channel",
+    importance: "high",
+    priority: "high",
+    vibrate: true,
+    vibration: 300,
+    actions: ["View"],
+    invokeApp: true,
+  });
+};
+
+
+// Create notification channel
+PushNotification.createChannel(
+  {
+    channelId: "default-channel", // (required)
+    channelName: "Default Channel", // (required)
+    channelDescription: "A default channel for notifications", // (optional) default: undefined.
+    playSound: true, // (optional) default: true
+    soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+    importance: 4, // (optional) default: 4. Int value of the Android notification importance
+    vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+  },
+  (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+);
+
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
@@ -17,10 +49,28 @@ PushNotification.configure({
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
 
-    // process the notification
+    // If the notification is received in foreground, show it as a local notification
+    if (notification.foreground) {
+      PushNotification.localNotification({
+        title: notification?.title || "New Notification",
+        message: notification.message || notification.body || "You have a new message",
+        playSound: true,
+        soundName: 'default',
+        channelId: "default-channel",
+        importance: "high",
+        priority: "high",
+        vibrate: true,
+        vibration: 300,
+        actions: ["View"],
+        invokeApp: true,
+        userInfo: notification.data || {},
+      });
+    }
 
-    // (required) Called when a remote is received or opened, or local notification is opened
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
+    // process the notification
+    if (notification.finish) {
+      notification.finish('backgroundFetchResultNoData');
+    }
   },
 
   // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)

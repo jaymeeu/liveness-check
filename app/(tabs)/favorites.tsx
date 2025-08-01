@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, Touchable, Pressable } from 'react-native';
+import NotificationTestButton from '@/components/NotificationTestButton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function FavoritesScreen() {
   return (
@@ -12,8 +12,7 @@ export default function FavoritesScreen() {
       <View style={styles.content}>
         <Text style={styles.title}>Favorites</Text>
         <Text style={styles.subtitle}>Coming Soon</Text>
-
-        <Link href={"/liveness"} style={{color : 'white', fontSize : 32}}>Go to liveness </Link>
+        <NotificationTestButton/>
       </View>
     </LinearGradient>
   );
