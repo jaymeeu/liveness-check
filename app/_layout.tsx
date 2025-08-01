@@ -51,9 +51,10 @@ PushNotification.configure({
 
     // If the notification is received in foreground, show it as a local notification
     if (notification.foreground) {
+      const notificationData = notification as any;
       PushNotification.localNotification({
-        title: notification?.title || "New Notification",
-        message: notification.message || notification.body || "You have a new message",
+        title: String(notificationData.title || "New Notification"),
+        message: String(notification.message || "You have a new message"),
         playSound: true,
         soundName: 'default',
         channelId: "default-channel",
@@ -82,7 +83,7 @@ PushNotification.configure({
   },
 
   // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  onRegistrationError: function(err) {
+  onRegistrationError: function (err) {
     console.error(err.message, err);
   },
 
@@ -107,19 +108,19 @@ PushNotification.configure({
   requestPermissions: true,
 });
 
- function RootLayout() {
+function RootLayout() {
   useFrameworkReady();
 
   return (
     <NotificationProvider>
       <Notification />
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </GestureHandlerRootView>
     </NotificationProvider>
 
   );
