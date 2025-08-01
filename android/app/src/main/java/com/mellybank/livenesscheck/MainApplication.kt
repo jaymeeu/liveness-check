@@ -1,4 +1,4 @@
-package com.datamellon.livenesscheck
+package com.mellybank.livenesscheck
 
 import android.app.Application
 import android.content.res.Configuration
@@ -18,7 +18,7 @@ import expo.modules.ReactNativeHostWrapper
 
 import com.amplifyframework.core.Amplify
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
-import com.datamellon.livenesscheck.liveness.FaceLivenessPackage
+import com.mellybank.livenesscheck.liveness.FaceLivenessPackage
 import android.util.Log;
 
 class MainApplication : Application(), ReactApplication {

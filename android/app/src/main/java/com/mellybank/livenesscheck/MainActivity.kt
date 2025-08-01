@@ -1,4 +1,4 @@
-package com.datamellon.livenesscheck
+package com.mellybank.livenesscheck
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

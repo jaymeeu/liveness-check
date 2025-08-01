@@ -32,7 +32,7 @@
 -keep interface com.amplifyframework.ui.liveness.** { *; }
 
 # Custom FaceLiveness module
--keep class com.datamellon.livenesscheck.liveness.** { *; }
+-keep class com.mellybank.livenesscheck.liveness.** { *; }
 
 # React Native core
 -keep class com.facebook.react.** { *; }

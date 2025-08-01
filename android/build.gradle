@@ -14,6 +14,7 @@ buildscript {
     classpath('com.facebook.react:react-native-gradle-plugin')
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     classpath("org.jetbrains.kotlin:kotlin-compiler-embeddable")
+    classpath 'com.google.gms:google-services:4.4.3'
   }
 }
 
@@ -35,6 +36,12 @@ allprojects {
     google()
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
+  }
+  
+  configurations.all {
+    exclude group: 'com.android.support', module: 'support-compat'
+    exclude group: 'com.android.support', module: 'support-v4'
+    exclude group: 'com.android.support'
   }
 }
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "327161053636",
+    "project_id": "dm-dillivry-push-notification",
+    "storage_bucket": "dm-dillivry-push-notification.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327161053636:android:73dc334482884eaf52e491",
+        "android_client_info": {
+          "package_name": "com.mellybank.livenesscheck"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXH-pPrDsrj_Gve_6u3FX8kOM6N9hGr7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327161053636:android:bab63d9fd7032ead52e491",
+        "android_client_info": {
+          "package_name": "datamellon.app_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXH-pPrDsrj_Gve_6u3FX8kOM6N9hGr7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
